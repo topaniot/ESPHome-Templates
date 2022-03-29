@@ -1,0 +1,21 @@
+substitutions:
+  friendly_name: "Device Name"
+  # Define I2C Pins  
+  i2c_sda: "1"
+  i2c_scl: "3"
+
+# Setup I2C
+i2c:
+  sda: ${i2c_sda}
+  scl: ${i2c_scl}  
+  scan: true
+  id: bus_a
+
+sensor:
+  # HTU21
+  - platform: htu21d
+    temperature:
+      name: "${friendly_name} HTU21 Temperature"
+    humidity:
+      name: "${friendly_name} HTU21 Humidity"
+    update_interval: 60s
