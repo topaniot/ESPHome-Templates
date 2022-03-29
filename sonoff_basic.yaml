@@ -1,14 +1,15 @@
 substitutions:
   name: device-name
   friendly_name: "Device Name"
-  board: sonoff_basic
+  board: esp01_1m
   
   password: !secret password
+  encryption_key: !secret encryption_key
   
   wifi_ssid: !secret wifi_ssid
   wifi_pswd: !secret wifi_password
   
-  ip: !secret ip_device-name
+  ip: !secret ip_d1mini
   gateway: !secret gateway
   subnet: !secret subnet
   
@@ -20,15 +21,20 @@ substitutions:
 
 esphome:
   name: ${name}
-
+  
 esp8266:
   board: ${board}
 
 logger:
+
 api:
+  password: ${password}
+  reboot_timeout: 5min
+  encryption:
+    key: ${encryption_key}
+
 ota:
   password: ${password}
-
 
 wifi:
   networks:
@@ -39,15 +45,17 @@ wifi:
   #   password: ${wifi_pswd}
   
   # Optional manual IP
-  manual_ip:
-    static_ip: ${ip}
-    gateway: ${gateway}
-    subnet: ${subnet}
+  # manual_ip:
+  #   static_ip: ${ip}
+  #   gateway: ${gateway}
+  #   subnet: ${subnet}
+    
   # Optional Fallback SSID
   ap:
     ssid: "${friendly_name} Fallback"
     password: ${password}
 captive_portal:
+
 
 # Sonoff Button
 binary_sensor:
@@ -59,6 +67,7 @@ binary_sensor:
         pullup: true
       inverted: true
     name: "${friendly_name} Button"
+    disabled_by_default: true
     on_press:
       - switch.toggle: relay
 
@@ -68,6 +77,7 @@ switch:
     name: "${friendly_name}"
     pin: GPIO12
     id: relay
+    icon: mdi:power
 
 # Sonoff Status LED
 status_led:
@@ -83,25 +93,49 @@ web_server:
     password: ${password}
   
 
-# Restart Button
+
 button:
+  # Restart Button
   - platform: restart
     name: "${friendly_name} Restart"
 
-# Sensors
+text_sensor:
+  # Uptime
+  - platform: template
+    name: ${friendly_name} Uptime
+    id: uptime_human
+    icon: mdi:clock-start
+    disabled_by_default: true
+    
+  # WiFi Info
+  - platform: wifi_info
+    ip_address:
+      name: "${friendly_name} IP"
+      icon: "mdi:ip-network"
+      disabled_by_default: true
+    ssid:
+      name: "${friendly_name} SSID"
+      icon: "mdi:wifi-strength-4"
+      disabled_by_default: true
+
 sensor:
+  # WiFi Signal
   - platform: wifi_signal
     name: "${friendly_name} RSSI"
     update_interval: 120s
     
+  # VCC Voltage
   - platform: adc
     pin: VCC
     name: "${friendly_name} VCC Voltage"
+    disabled_by_default: true
     
+  # Uptime
   - platform: uptime
-    name: "${friendly_name} Uptime"
+    name: "${friendly_name} Uptime Seconds"
     id: uptime_sensor
     update_interval: 60s
+    disabled_by_default: true
     on_raw_value:
       then:
         - text_sensor.template.publish:
@@ -120,18 +154,4 @@ sensor:
                 (minutes ? to_string(minutes) + "m " : "") +
                 (to_string(seconds) + "s")
               ).c_str();
-              
-text_sensor:
-  - platform: template
-    name: "${friendly_name} Uptime Human Readable"
-    id: uptime_human
-    icon: mdi:clock-start
-    
-  - platform: wifi_info
-    ip_address:
-      name: "${friendly_name} IP"
-      icon: "mdi:ip-network"
-    ssid:
-      name: "${friendly_name} SSID"
-      icon: "mdi:wifi-strength-4"
-      
+
