@@ -54,7 +54,7 @@ wifi:
     
   # Optional Fallback SSID
   ap:
-    ssid: "${friendly_name} Fallback"
+    ssid: "${friendly_name}"
     password: ${password}
 captive_portal:
 
