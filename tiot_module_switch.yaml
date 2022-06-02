@@ -1,23 +1,24 @@
 substitutions:
-  name: device-name
   friendly_name: "Device Name"
-  board: esp01_1m
+  name: device-name
   
+  ip: !secret device_ip
+  gateway: !secret gateway
+  subnet: !secret subnet
+
+  board: esp01_1m
+
   password: !secret password
-  encryption_key: !secret encryption_key
+  encryption_key: !secret encryption_key  
   
   wifi_ssid: !secret wifi_ssid
   wifi_pswd: !secret wifi_password
-  
-  ip: !secret ip_toit_module
-  gateway: !secret gateway
-  subnet: !secret subnet
-  
+
   # Optional
   # wifi_ssid2: !secret wifi_ssid2
   # wifi_pswd2: !secret wifi_password2
-
-
+  
+#########################################
 
 esphome:
   name: ${name}
