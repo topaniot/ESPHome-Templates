@@ -9,7 +9,7 @@ substitutions:
   wifi_ssid: !secret wifi_ssid
   wifi_pswd: !secret wifi_password
   
-  ip: !secret ip_d1mini
+  ip: !secret device_ip
   gateway: !secret gateway
   subnet: !secret subnet
   
@@ -45,10 +45,10 @@ wifi:
   #   password: ${wifi_pswd}
   
   # Optional manual IP
-  # manual_ip:
-  #   static_ip: ${ip}
-  #   gateway: ${gateway}
-  #   subnet: ${subnet}
+  manual_ip:
+    static_ip: ${ip}
+    gateway: ${gateway}
+    subnet: ${subnet}
     
   # Optional Fallback SSID
   ap:
@@ -92,8 +92,6 @@ web_server:
     username: ${name}
     password: ${password}
   
-
-
 button:
   # Restart Button
   - platform: restart
