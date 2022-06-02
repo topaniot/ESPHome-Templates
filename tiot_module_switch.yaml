@@ -45,10 +45,10 @@ wifi:
   #   password: ${wifi_pswd}
   
   # Optional manual IP
-  # manual_ip:
-  #   static_ip: ${ip}
-  #   gateway: ${gateway}
-  #   subnet: ${subnet}
+  manual_ip:
+    static_ip: ${ip}
+    gateway: ${gateway}
+    subnet: ${subnet}
     
   # Optional Fallback SSID
   ap:
