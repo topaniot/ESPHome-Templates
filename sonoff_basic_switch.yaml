@@ -56,7 +56,6 @@ wifi:
     password: ${password}
 captive_portal:
 
-
 # Sonoff Button
 binary_sensor:
   - platform: gpio
