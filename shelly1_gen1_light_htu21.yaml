@@ -2,7 +2,7 @@ substitutions:
   friendly_name: "Device Name"
   name: device-name
   
-  ip: !secret device_ip
+  ip: 192.168.x.x
   gateway: !secret gateway
   subnet: !secret subnet
 
