@@ -2,12 +2,11 @@ substitutions:
   friendly_name: "Device Name"
   name: device-name
   
-  ip: !secret device_ip
+  ip: 192.168.x.x
   gateway: !secret gateway
   subnet: !secret subnet
 
   board: esp01_1m
-
   password: !secret password
   encryption_key: !secret encryption_key  
   
@@ -17,20 +16,19 @@ substitutions:
   # Optional
   # wifi_ssid2: !secret wifi_ssid2
   # wifi_pswd2: !secret wifi_password2
-  
-#########################################
 
+#########################################
 
 esphome:
   name: ${name}
-  
+
 esp8266:
   board: ${board}
 
 logger:
+captive_portal:
 
 api:
-  password: ${password}
   reboot_timeout: 5min
   encryption:
     key: ${encryption_key}
@@ -38,61 +36,30 @@ api:
 ota:
   password: ${password}
 
-wifi:
-  networks:
-  - ssid: ${wifi_ssid}
-    password: ${wifi_pswd}
-  # Optional sencondary SSID
-  # - ssid: ${wifi_ssid}
-  #   password: ${wifi_pswd}
-  
-  # Optional manual IP
-  manual_ip:
-    static_ip: ${ip}
-    gateway: ${gateway}
-    subnet: ${subnet}
-    
-  # Optional Fallback SSID
-  ap:
-    ssid: "${friendly_name}"
-    password: ${password}
-captive_portal:
-
-# Sonoff Button
-binary_sensor:
-  - platform: gpio
-    pin:
-      number: GPIO0
-      mode:
-        input: true
-        pullup: true
-      inverted: true
-    name: "${friendly_name} Button"
-    disabled_by_default: true
-    on_press:
-      - switch.toggle: relay
-
-# Sonoff Relay
-switch:
-  - platform: gpio
-    name: "${friendly_name}"
-    pin: GPIO12
-    id: relay
-    icon: mdi:power
-
-# Sonoff Status LED
-status_led:
-  pin:
-    number: GPIO13
-    inverted: yes
-
 # Enable Web Server
 web_server:
   port: 80
   auth:
     username: ${name}
     password: ${password}
-  
+
+wifi:
+  networks:
+  - ssid: ${wifi_ssid}
+    password: ${wifi_pswd}
+  # Optional sencondary SSID
+  # - ssid: ${wifi_ssid2}
+  #   password: ${wifi_pswd2}
+  # Optional manual IP
+  manual_ip:
+    static_ip: ${ip}
+    gateway: ${gateway}
+    subnet: ${subnet}
+  # Optional Fallback SSID
+  ap:
+    ssid: "${friendly_name}"
+    password: ${password}
+
 button:
   # Restart Button
   - platform: restart
@@ -135,6 +102,7 @@ sensor:
     id: uptime_sensor
     update_interval: 60s
     disabled_by_default: true
+    internal: true
     on_raw_value:
       then:
         - text_sensor.template.publish:
@@ -154,3 +122,32 @@ sensor:
                 (to_string(seconds) + "s")
               ).c_str();
 
+# Device Specific Config
+
+# Sonoff Status LED
+status_led:
+  pin:
+    number: GPIO13
+    inverted: yes
+
+# Sonoff Relay
+switch:
+  - platform: gpio
+    name: "${friendly_name}"
+    pin: GPIO12
+    id: relay
+    icon: mdi:power
+
+# Sonoff Button
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO0
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    name: "${friendly_name} Button"
+    disabled_by_default: true
+    on_press:
+      - switch.toggle: relay
