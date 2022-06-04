@@ -1,13 +1,20 @@
 substitutions:
-  friendly_name: "Xiaomi3"
-  name: node2esp32
+  friendly_name: "Node1 ESP32"
+  name: node1-esp32
+
+  ble_name_1: "Xiaomi1"
+  ble_sensor_1: xiaomi_lywsdcgq
+  ble_mac_1: 58:2D:34:38:EE:8F
   
-  ip: 192.168.71.22
+  ble_name_2: "Xiaomi2"
+  ble_sensor_2: xiaomi_lywsdcgq
+  ble_mac_2: 58:2D:34:38:F2:62
+
+  ip: 192.168.x.x
   gateway: !secret gateway
   subnet: !secret subnet
 
   board: nodemcu-32s
-
   password: !secret password
   encryption_key: !secret encryption_key  
   
@@ -17,21 +24,22 @@ substitutions:
   # Optional
   # wifi_ssid2: !secret wifi_ssid2
   # wifi_pswd2: !secret wifi_password2
-  
-  ble_sensor: xiaomi_lywsdcgq
-  ble_mac: 58:2D:34:38:F4:95
-  
+
 #########################################
 
 esphome:
   name: ${name}
-  platform: ESP32
+
+esp32:
   board: ${board}
+  framework:
+    type: arduino
 
 logger:
+esp32_ble_tracker:
+captive_portal:
 
 api:
-  password: ${password}
   reboot_timeout: 5min
   encryption:
     key: ${encryption_key}
@@ -52,12 +60,10 @@ wifi:
     static_ip: ${ip}
     gateway: ${gateway}
     subnet: ${subnet}
-    
-  # Optional Fallback SSID
+  # AP for Fallback
   ap:
     ssid: "${friendly_name}"
     password: ${password}
-captive_portal:
 
 # Enable Web Server
 web_server:
@@ -65,25 +71,49 @@ web_server:
   auth:
     username: ${name}
     password: ${password}
-    
-    
-esp32_ble_tracker:
 
 sensor:
-  # Xiaomi sensors
-  - platform: ${ble_sensor}
-    mac_address: ${ble_mac}
+  # Xiaomi 1 sensors
+  - platform: ${ble_sensor_1}
+    mac_address: ${ble_mac_1}
     temperature:
-      name: "${friendly_name} Temp"
+      name: "${ble_name_1} Temp"
     humidity:
-      name: "${friendly_name} Humidity"
+      name: "${ble_name_1} Humidity"
     battery_level:
-      name: "${friendly_name} Battery"
+      name: "${ble_name_1} Battery"
+      
+  # Xiaomi 1 Ble RSSI
+  - platform: ble_rssi
+    mac_address: ${ble_mac_1}
+    name: "${ble_name_1} Ble RSSI"
+    icon: "mdi:bluetooth"
+
+  # Xiaomi 2 sensors
+  - platform: ${ble_sensor_2}
+    mac_address: ${ble_mac_2}
+    temperature:
+      name: "${ble_name_2} Temp"
+    humidity:
+      name: "${ble_name_2} Humidity"
+    battery_level:
+      name: "${ble_name_2} Battery"
+
+  # Xiaomi 2 Ble RSSI
+  - platform: ble_rssi
+    mac_address: ${ble_mac_2}
+    name: "${ble_name_2} Ble RSSI"
+    icon: "mdi:bluetooth"
 
   # WiFi Signal
   - platform: wifi_signal
     name: "${friendly_name} RSSI"
     update_interval: 120s
+    filters:
+      - lambda: |-
+          float VALUE = 0.0;
+          if (x <= VALUE) return x;
+          else return {};
 
   # Uptime
   - platform: uptime
@@ -91,6 +121,7 @@ sensor:
     id: uptime_sensor
     update_interval: 60s
     disabled_by_default: true
+    internal: true
     on_raw_value:
       then:
         - text_sensor.template.publish:
@@ -108,19 +139,18 @@ sensor:
                 (hours ? to_string(hours) + "h " : "") +
                 (minutes ? to_string(minutes) + "m " : "") +
                 (to_string(seconds) + "s")
-              ).c_str();    
-    
-# bluetooth signal
-  - platform: ble_rssi
-    mac_address: ${ble_mac}
-    name: "${friendly_name} Ble RSSI"
-    icon: "mdi:bluetooth"
-    
+              ).c_str();
+              
 binary_sensor:
-  # Ble presence sensor
+  # Xiaomi 1 Ble Presence
   - platform: ble_presence
-    mac_address: ${ble_mac}
-    name: "${friendly_name}"
+    mac_address: ${ble_mac_1}
+    name: "${ble_name_1} Presence"
+
+  # Xiaomi 2 Ble Presence
+  - platform: ble_presence
+    mac_address: ${ble_mac_2}
+    name: "${ble_name_2} Presence"
 
 button:
   # Restart Button
@@ -128,13 +158,6 @@ button:
     name: "${friendly_name} Restart"
     
 text_sensor:
-  # Uptime
-  - platform: template
-    name: ${friendly_name} Uptime
-    id: uptime_human
-    icon: mdi:clock-start
-    disabled_by_default: true
-    
   # WiFi Info
   - platform: wifi_info
     ip_address:
@@ -145,3 +168,10 @@ text_sensor:
       name: "${friendly_name} SSID"
       icon: "mdi:wifi-strength-4"
       disabled_by_default: true
+      
+  # Uptime
+  - platform: template
+    name: ${friendly_name} Uptime
+    id: uptime_human
+    icon: mdi:clock-start
+    disabled_by_default: true

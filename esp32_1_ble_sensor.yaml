@@ -1,12 +1,16 @@
 substitutions:
-  friendly_name: "Device Name"
-  name: device-name
+  friendly_name: "Node1 ESP32"
+  name: node1-esp32
+
+  ble_name_1: "Xiaomi1"
+  ble_sensor_1: xiaomi_lywsdcgq
+  ble_mac_1: 58:2D:34:38:EE:8F
   
   ip: 192.168.x.x
   gateway: !secret gateway
   subnet: !secret subnet
 
-  board: esp01_1m
+  board: nodemcu-32s
   password: !secret password
   encryption_key: !secret encryption_key  
   
@@ -22,10 +26,13 @@ substitutions:
 esphome:
   name: ${name}
 
-esp8266:
+esp32:
   board: ${board}
+  framework:
+    type: arduino
 
 logger:
+esp32_ble_tracker:
 captive_portal:
 
 api:
@@ -36,6 +43,24 @@ api:
 ota:
   password: ${password}
 
+wifi:
+  networks:
+  - ssid: ${wifi_ssid}
+    password: ${wifi_pswd}
+  # Optional sencondary SSID
+  # - ssid: ${wifi_ssid}
+  #   password: ${wifi_pswd}
+  
+  # Optional manual IP
+  manual_ip:
+    static_ip: ${ip}
+    gateway: ${gateway}
+    subnet: ${subnet}
+  # AP for Fallback
+  ap:
+    ssid: "${friendly_name}"
+    password: ${password}
+
 # Enable Web Server
 web_server:
   port: 80
@@ -43,59 +68,33 @@ web_server:
     username: ${name}
     password: ${password}
 
-wifi:
-  networks:
-  - ssid: ${wifi_ssid}
-    password: ${wifi_pswd}
-  # Optional sencondary SSID
-  # - ssid: ${wifi_ssid2}
-  #   password: ${wifi_pswd2}
-  # Optional manual IP
-  manual_ip:
-    static_ip: ${ip}
-    gateway: ${gateway}
-    subnet: ${subnet}
-  # Optional Fallback SSID
-  ap:
-    ssid: "${friendly_name}"
-    password: ${password}
-
-button:
-  # Restart Button
-  - platform: restart
-    name: "${friendly_name} Restart"
-
-text_sensor:
-  # Uptime
-  - platform: template
-    name: ${friendly_name} Uptime
-    id: uptime_human
-    icon: mdi:clock-start
-    disabled_by_default: true
-    
-  # WiFi Info
-  - platform: wifi_info
-    ip_address:
-      name: "${friendly_name} IP"
-      icon: "mdi:ip-network"
-      disabled_by_default: true
-    ssid:
-      name: "${friendly_name} SSID"
-      icon: "mdi:wifi-strength-4"
-      disabled_by_default: true
-
 sensor:
+  # Xiaomi 1 sensors
+  - platform: ${ble_sensor_1}
+    mac_address: ${ble_mac_1}
+    temperature:
+      name: "${ble_name_1} Temp"
+    humidity:
+      name: "${ble_name_1} Humidity"
+    battery_level:
+      name: "${ble_name_1} Battery"
+      
+  # Xiaomi 1 Ble RSSI
+  - platform: ble_rssi
+    mac_address: ${ble_mac_1}
+    name: "${ble_name_1} Ble RSSI"
+    icon: "mdi:bluetooth"
+
   # WiFi Signal
   - platform: wifi_signal
     name: "${friendly_name} RSSI"
     update_interval: 120s
-    
-  # VCC Voltage
-  - platform: adc
-    pin: VCC
-    name: "${friendly_name} VCC Voltage"
-    disabled_by_default: true
-    
+    filters:
+      - lambda: |-
+          float VALUE = 0.0;
+          if (x <= VALUE) return x;
+          else return {};
+
   # Uptime
   - platform: uptime
     name: "${friendly_name} Uptime Seconds"
@@ -121,23 +120,33 @@ sensor:
                 (minutes ? to_string(minutes) + "m " : "") +
                 (to_string(seconds) + "s")
               ).c_str();
-
-# Device Specific Config shelly1
-
-# Button
+              
 binary_sensor:
-  - platform: gpio
-    pin:
-      number: GPIO5
-    name: "${friendly_name} Input"
-    disabled_by_default: true
-    on_state:
-      - switch.toggle: relay
+  # Xiaomi 1 Ble Presence
+  - platform: ble_presence
+    mac_address: ${ble_mac_1}
+    name: "${ble_name_1} Presence"
 
-# Relay
-switch:
-  - platform: gpio
-    name: "${friendly_name}"
-    pin: GPIO4
-    id: relay
-    icon: mdi:power
+button:
+  # Restart Button
+  - platform: restart
+    name: "${friendly_name} Restart"
+    
+text_sensor:
+  # WiFi Info
+  - platform: wifi_info
+    ip_address:
+      name: "${friendly_name} IP"
+      icon: "mdi:ip-network"
+      disabled_by_default: true
+    ssid:
+      name: "${friendly_name} SSID"
+      icon: "mdi:wifi-strength-4"
+      disabled_by_default: true
+      
+  # Uptime
+  - platform: template
+    name: ${friendly_name} Uptime
+    id: uptime_human
+    icon: mdi:clock-start
+    disabled_by_default: true

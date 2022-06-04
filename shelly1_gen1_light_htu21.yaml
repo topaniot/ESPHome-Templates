@@ -2,12 +2,11 @@ substitutions:
   friendly_name: "Device Name"
   name: device-name
   
-  ip: !secret device_ip
+  ip: 192.168.x.x
   gateway: !secret gateway
   subnet: !secret subnet
 
   board: esp01_1m
-
   password: !secret password
   encryption_key: !secret encryption_key  
   
@@ -31,15 +30,22 @@ esp8266:
   board: ${board}
 
 logger:
+captive_portal:
 
 api:
-  password: ${password}
   reboot_timeout: 5min
   encryption:
     key: ${encryption_key}
 
 ota:
   password: ${password}
+
+# Enable Web Server
+web_server:
+  port: 80
+  auth:
+    username: ${name}
+    password: ${password}
 
 wifi:
   networks:
@@ -48,50 +54,22 @@ wifi:
   # Optional sencondary SSID
   # - ssid: ${wifi_ssid2}
   #   password: ${wifi_pswd2}
-  
   # Optional manual IP
   manual_ip:
     static_ip: ${ip}
     gateway: ${gateway}
     subnet: ${subnet}
- 
   # Optional Fallback SSID
   ap:
     ssid: "${friendly_name}"
     password: ${password}
-captive_portal:
 
-# Device Specific Config shelly1
-output:
-  - platform: gpio
-    pin: GPIO4
-    id: shelly_1_relay
-
-light:
-  - platform: binary
-    name: "${friendly_name}"
-    output: shelly_1_relay
-    id: lightid
-
-binary_sensor:
-  - platform: gpio
-    pin:
-      number: GPIO5
-      #mode: INPUT_PULLUP
-      #inverted: True
-    name: "${friendly_name} Switch"
-    on_state:
-      then:
-        - light.toggle: lightid
-    internal: true
-    id: switchid
-
-# Enable Web Server
-web_server:
-  port: 80
-  auth:
-    username: ${name}
-    password: ${password}
+# Setup I2C
+i2c:
+  sda: ${i2c_sda}
+  scl: ${i2c_scl}  
+  scan: true
+  id: bus_a
 
 button:
   # Restart Button
@@ -116,13 +94,6 @@ text_sensor:
       name: "${friendly_name} SSID"
       icon: "mdi:wifi-strength-4"
       disabled_by_default: true
-
-# Setup I2C
-i2c:
-  sda: ${i2c_sda}
-  scl: ${i2c_scl}  
-  scan: true
-  id: bus_a
 
 sensor:
   # HTU21
@@ -150,6 +121,7 @@ sensor:
     id: uptime_sensor
     update_interval: 60s
     disabled_by_default: true
+    internal: true
     on_raw_value:
       then:
         - text_sensor.template.publish:
@@ -168,3 +140,26 @@ sensor:
                 (minutes ? to_string(minutes) + "m " : "") +
                 (to_string(seconds) + "s")
               ).c_str();
+
+# Device Specific Config shelly1
+output:
+  - platform: gpio
+    pin: GPIO4
+    id: shelly_1_relay
+
+light:
+  - platform: binary
+    name: "${friendly_name}"
+    output: shelly_1_relay
+    id: lightid
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO5
+    name: "${friendly_name} Switch"
+    on_state:
+      then:
+        - light.toggle: lightid
+    internal: true
+    id: switchid
