@@ -156,8 +156,6 @@ binary_sensor:
   - platform: gpio
     pin:
       number: GPIO5
-      #mode: INPUT_PULLUP
-      #inverted: True
     name: "${friendly_name} Switch"
     on_state:
       then:
