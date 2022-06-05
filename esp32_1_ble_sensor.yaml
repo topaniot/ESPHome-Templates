@@ -2,9 +2,9 @@ substitutions:
   friendly_name: "Node1 ESP32"
   name: node1-esp32
 
-  ble_name_1: "Xiaomi1"
+  ble_name_1: "Ble Sensor 1"
   ble_sensor_1: xiaomi_lywsdcgq
-  ble_mac_1: 58:2D:34:38:EE:8F
+  ble_mac_1: xx:xx:xx:xx:xx:xx
   
   ip: 192.168.x.x
   gateway: !secret gateway
@@ -44,18 +44,21 @@ ota:
   password: ${password}
 
 wifi:
+  # First SSID
   networks:
   - ssid: ${wifi_ssid}
     password: ${wifi_pswd}
-  # Optional sencondary SSID
-  # - ssid: ${wifi_ssid}
-  #   password: ${wifi_pswd}
+
+  # Second SSID
+  # - ssid: ${wifi_ssid2}
+  #   password: ${wifi_pswd2}
   
-  # Optional manual IP
+  # Manual IP
   manual_ip:
     static_ip: ${ip}
     gateway: ${gateway}
     subnet: ${subnet}
+
   # AP for Fallback
   ap:
     ssid: "${friendly_name}"
@@ -91,7 +94,7 @@ sensor:
     update_interval: 120s
     filters:
       - lambda: |-
-          float VALUE = 0.0;
+          float VALUE = -20.0;
           if (x <= VALUE) return x;
           else return {};
 
