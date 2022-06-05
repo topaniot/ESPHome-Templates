@@ -54,8 +54,8 @@ wifi:
     password: ${wifi_pswd}
 
   # Second SSID
-  # - ssid: ${wifi_ssid}
-  #   password: ${wifi_pswd}
+  # - ssid: ${wifi_ssid2}
+  #   password: ${wifi_pswd2}
   
   # Manual IP
   manual_ip:

@@ -36,28 +36,32 @@ api:
 ota:
   password: ${password}
 
+wifi:
+  # First SSID
+  networks:
+  - ssid: ${wifi_ssid}
+    password: ${wifi_pswd}
+
+  # Second SSID
+  # - ssid: ${wifi_ssid2}
+  #   password: ${wifi_pswd2}
+  
+  # Manual IP
+  manual_ip:
+    static_ip: ${ip}
+    gateway: ${gateway}
+    subnet: ${subnet}
+
+  # AP for Fallback
+  ap:
+    ssid: "${friendly_name}"
+    password: ${password}
+
 # Enable Web Server
 web_server:
   port: 80
   auth:
     username: ${name}
-    password: ${password}
-
-wifi:
-  networks:
-  - ssid: ${wifi_ssid}
-    password: ${wifi_pswd}
-  # Optional sencondary SSID
-  # - ssid: ${wifi_ssid2}
-  #   password: ${wifi_pswd2}
-  # Optional manual IP
-  manual_ip:
-    static_ip: ${ip}
-    gateway: ${gateway}
-    subnet: ${subnet}
-  # Optional Fallback SSID
-  ap:
-    ssid: "${friendly_name}"
     password: ${password}
 
 button:
@@ -91,7 +95,7 @@ sensor:
     update_interval: 120s
     filters:
       - lambda: |-
-          float VALUE = 0.0;
+          float VALUE = -20.0;
           if (x <= VALUE) return x;
           else return {};
     
