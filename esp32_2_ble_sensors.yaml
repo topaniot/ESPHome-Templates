@@ -2,13 +2,13 @@ substitutions:
   friendly_name: "Node1 ESP32"
   name: node1-esp32
 
-  ble_name_1: "Xiaomi1"
+  ble_name_1: "Ble Sensor 1"
   ble_sensor_1: xiaomi_lywsdcgq
-  ble_mac_1: 58:2D:34:38:EE:8F
+  ble_mac_1: xx:xx:xx:xx:xx:xx
   
-  ble_name_2: "Xiaomi2"
+  ble_name_2: "Ble Sensor 2"
   ble_sensor_2: xiaomi_lywsdcgq
-  ble_mac_2: 58:2D:34:38:F2:62
+  ble_mac_2: xx:xx:xx:xx:xx:xx
 
   ip: 192.168.x.x
   gateway: !secret gateway

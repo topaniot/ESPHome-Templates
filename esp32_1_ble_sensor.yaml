@@ -2,7 +2,7 @@ substitutions:
   friendly_name: "Node1 ESP32"
   name: node1-esp32
 
-  ble_name_1: "Xiaomi1"
+  ble_name_1: "Ble Sensor 1"
   ble_sensor_1: xiaomi_lywsdcgq
   ble_mac_1: xx:xx:xx:xx:xx:xx
   
