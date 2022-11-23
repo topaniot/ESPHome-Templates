@@ -3,6 +3,7 @@ substitutions:
   name: device-name
   
   ip: 192.168.x.x
+  ip_com: 192.168.x.x
   gateway: !secret gateway
   subnet: !secret subnet
 
@@ -51,7 +52,7 @@ wifi:
     static_ip: ${ip}
     gateway: ${gateway}
     subnet: ${subnet}
-
+  use_address: ${ip_com}
   # AP for Fallback
   ap:
     ssid: "${friendly_name}"
