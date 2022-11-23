@@ -1,6 +1,7 @@
 substitutions:
   friendly_name: "Device Name"
   name: device-name
+  compile_limit: 1
   
   ip: 192.168.x.x
   ip_com: 192.168.x.x
@@ -22,6 +23,7 @@ substitutions:
 
 esphome:
   name: ${name}
+  compile_process_limit: ${compile_limit}
 
 esp8266:
   board: ${board}
