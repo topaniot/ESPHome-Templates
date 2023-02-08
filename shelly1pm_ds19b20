@@ -1,0 +1,243 @@
+substitutions:
+  friendly_name: "Device Name"
+  name: device-name
+  compile_limit: "1"
+  max_temp: "70.0"
+  icon: "mdi:radiator"
+  ds18b20_adress: "0x0000000000000000"
+  
+  ip: 192.168.x.x
+  ip_com: 192.168.x.x
+  gateway: !secret gateway
+  subnet: !secret subnet
+
+  board: esp01_1m
+  password: !secret password
+  encryption_key: !secret encryption_key  
+  
+  wifi_ssid: !secret wifi_ssid
+  wifi_pswd: !secret wifi_password
+
+  # Optional
+  # wifi_ssid2: !secret wifi_ssid2
+  # wifi_pswd2: !secret wifi_password2
+
+#########################################
+
+esphome:
+  name: ${name}
+  compile_process_limit: ${compile_limit}
+
+esp8266:
+  board: ${board}
+
+logger:
+captive_portal:
+
+api:
+  reboot_timeout: 5min
+  encryption:
+    key: ${encryption_key}
+
+ota:
+  password: ${password}
+
+wifi:
+  # First SSID
+  networks:
+  - ssid: ${wifi_ssid}
+    password: ${wifi_pswd}
+
+  # Second SSID
+  # - ssid: ${wifi_ssid2}
+  #   password: ${wifi_pswd2}
+  
+  # Manual IP
+  manual_ip:
+    static_ip: ${ip}
+    gateway: ${gateway}
+    subnet: ${subnet}
+  use_address: ${ip_com}
+  # AP for Fallback
+  ap:
+    ssid: "${friendly_name}"
+    password: ${password}
+
+# Enable Web Server
+web_server:
+  port: 80
+  auth:
+    username: ${name}
+    password: ${password}
+
+button:
+  # Restart Button
+  - platform: restart
+    name: "${friendly_name} Restart"
+
+text_sensor:
+  # Uptime
+  - platform: template
+    name: ${friendly_name} Uptime
+    id: uptime_human
+    icon: mdi:clock-start
+    disabled_by_default: true
+    
+  # WiFi Info
+  - platform: wifi_info
+    ip_address:
+      name: "${friendly_name} IP"
+      icon: "mdi:ip-network"
+      disabled_by_default: true
+    ssid:
+      name: "${friendly_name} SSID"
+      icon: "mdi:wifi-strength-4"
+      disabled_by_default: true
+
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+
+sensor:
+  # WiFi Signal
+  - platform: wifi_signal
+    name: "${friendly_name} RSSI"
+    update_interval: 120s
+    filters:
+      - lambda: |-
+          float VALUE = -20.0;
+          if (x <= VALUE) return x;
+          else return {};
+    
+  # VCC Voltage
+  - platform: adc
+    pin: VCC
+    name: "${friendly_name} VCC Voltage"
+    disabled_by_default: true
+    
+  # Uptime
+  - platform: uptime
+    name: "${friendly_name} Uptime Seconds"
+    id: uptime_sensor
+    update_interval: 60s
+    disabled_by_default: true
+    internal: true
+    on_raw_value:
+      then:
+        - text_sensor.template.publish:
+            id: uptime_human
+            state: !lambda |-
+              int seconds = round(id(uptime_sensor).raw_state);
+              int days = seconds / (24 * 3600);
+              seconds = seconds % (24 * 3600);
+              int hours = seconds / 3600;
+              seconds = seconds % 3600;
+              int minutes = seconds /  60;
+              seconds = seconds % 60;
+              return (
+                (days ? to_string(days) + "d " : "") +
+                (hours ? to_string(hours) + "h " : "") +
+                (minutes ? to_string(minutes) + "m " : "") +
+                (to_string(seconds) + "s")
+              ).c_str();
+
+# Device Specific Config
+  - platform: hlw8012
+    cf_pin: GPIO05
+    cf1_pin: GPIO13 # not used because it is not available on the 1PM but it is needed to compile
+    sel_pin: GPIO14 # not used because it is not available on the 1PM but it is needed to compile
+    power:
+      name: "${friendly_name} Power"
+      unit_of_measurement: W
+      id: "shelly1pm_power"
+      device_class: power
+      state_class: measurement
+      accuracy_decimals: 0
+      filters:
+      # Map from sensor -> measured value
+      - calibrate_linear:
+          - 0.0 -> 1.0
+          - 110.33186 -> 20.62
+          - 131.01909 -> 24.32
+          - 341.33920 -> 62.08
+          - 5561.41553 -> 1000.0
+          - 2975.51221 -> 535.7
+          - 9612.66309 -> 1720.0
+          - 14891.35352 -> 2679.0
+      # Make everything below 2W appear as just 0W.
+      - lambda: if (x < 2) return 0; else return x;
+    update_interval: 10s
+
+  - platform: total_daily_energy
+    name: "${friendly_name} Daily Energy"
+    power_id: "shelly1pm_power"
+    device_class: energy
+    state_class: measurement
+    filters:
+      - multiply: 0.001
+    unit_of_measurement: kWh
+
+  - platform: ntc
+    sensor: temp_resistance_reading
+    name: "${friendly_name} Analog Temperature"
+    unit_of_measurement: "°C"
+    accuracy_decimals: 1
+    device_class: temperature
+    calibration:
+      b_constant: 3350
+      reference_temperature: 25°C
+      reference_resistance: 10kOhm
+    on_value_range:
+      - above: ${max_temp}
+        then:
+          - switch.turn_off: shelly_relay
+          - homeassistant.event:
+              event: esphome.overheat
+              data:
+                title: "${friendly_name} has Overheated."
+  - platform: resistance
+    id: temp_resistance_reading
+    sensor: temp_analog_reading
+    configuration: DOWNSTREAM
+    resistor: 5.6kOhm
+  - platform: adc
+    id: temp_analog_reading
+    pin: A0
+  # DS18B20 Temperature
+  - platform: dallas
+    address: ${ds18b20_adress}
+    name: "${friendly_name} DS18B20 Temperature"
+
+dallas:
+  - pin: GPIO0
+
+output:
+  - platform: esp8266_pwm
+    id: state_led
+    pin:
+      number: GPIO00
+      inverted: true
+
+# Sonoff Relay
+switch:
+  - platform: gpio
+    name: "${friendly_name}"
+    pin: GPIO15
+    id: shelly_relay
+    restore_mode: ALWAYS_OFF
+    icon: "${icon}"
+
+# Button
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO4
+    filters:
+      - delayed_on_off: 50ms
+    name: "${friendly_name} Input"
+    on_press:
+      then:
+        - switch.toggle: shelly_relay
+    disabled_by_default: true
+    id: switchid
+
