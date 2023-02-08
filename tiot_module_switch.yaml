@@ -141,7 +141,7 @@ binary_sensor:
       mode:
         input: true
         pullup: true
-      inverted: false
+      inverted: true
     name: "${friendly_name} Input 1"
     disabled_by_default: true
     on_state:
@@ -152,7 +152,7 @@ binary_sensor:
       mode:
         input: true
         pullup: true
-      inverted: false
+      inverted: true
     name: "${friendly_name} Input 2"
     disabled_by_default: true
 
