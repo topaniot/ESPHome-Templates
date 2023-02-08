@@ -1,7 +1,7 @@
 substitutions:
   friendly_name: "Device Name"
   name: device-name
-  compile_limit: 1
+  compile_limit: "1"
   
   ip: 192.168.x.x
   ip_com: 192.168.x.x
