@@ -4,7 +4,7 @@ substitutions:
   compile_limit: "4"
   max_temp: "70.0"
   icon: "mdi:radiator"
-  ds18b20_adress: "0x0"
+  ds18b20_adress: "0x00"
   
   ip: 192.168.x.x
   ip_com: 192.168.x.x
