@@ -1,7 +1,8 @@
 substitutions:
   friendly_name: "Device Name"
   name: device-name
-  compile_limit: "1"
+  icon: mdi:switch
+  compile_limit: "4"
   
   ip: 192.168.x.x
   ip_com: 192.168.x.x
@@ -23,6 +24,7 @@ substitutions:
 
 esphome:
   name: ${name}
+  friendly_name: ${friendly_name}
   compile_process_limit: ${compile_limit}
 
 esp8266:
@@ -70,31 +72,25 @@ web_server:
 button:
   # Restart Button
   - platform: restart
-    name: "${friendly_name} Restart"
+    name: "Restart"
 
 text_sensor:
-  # Uptime
-  - platform: template
-    name: ${friendly_name} Uptime
-    id: uptime_human
-    icon: mdi:clock-start
-    disabled_by_default: true
     
   # WiFi Info
   - platform: wifi_info
     ip_address:
-      name: "${friendly_name} IP"
+      name: "IP"
       icon: "mdi:ip-network"
       disabled_by_default: true
     ssid:
-      name: "${friendly_name} SSID"
+      name: "SSID"
       icon: "mdi:wifi-strength-4"
       disabled_by_default: true
 
 sensor:
   # WiFi Signal
   - platform: wifi_signal
-    name: "${friendly_name} RSSI"
+    name: "RSSI"
     update_interval: 120s
     filters:
       - lambda: |-
@@ -105,37 +101,11 @@ sensor:
   # VCC Voltage
   - platform: adc
     pin: VCC
-    name: "${friendly_name} VCC Voltage"
+    name: "VCC Voltage"
     disabled_by_default: true
     
-  # Uptime
-  - platform: uptime
-    name: "${friendly_name} Uptime Seconds"
-    id: uptime_sensor
-    update_interval: 60s
-    disabled_by_default: true
-    internal: true
-    on_raw_value:
-      then:
-        - text_sensor.template.publish:
-            id: uptime_human
-            state: !lambda |-
-              int seconds = round(id(uptime_sensor).raw_state);
-              int days = seconds / (24 * 3600);
-              seconds = seconds % (24 * 3600);
-              int hours = seconds / 3600;
-              seconds = seconds % 3600;
-              int minutes = seconds /  60;
-              seconds = seconds % 60;
-              return (
-                (days ? to_string(days) + "d " : "") +
-                (hours ? to_string(hours) + "h " : "") +
-                (minutes ? to_string(minutes) + "m " : "") +
-                (to_string(seconds) + "s")
-              ).c_str();
-
+    
 # Device Specific Config
-
 # Sonoff Status LED
 status_led:
   pin:
@@ -145,10 +115,10 @@ status_led:
 # Sonoff Relay
 switch:
   - platform: gpio
-    name: "${friendly_name}"
+    name: ""
     pin: GPIO12
     id: relay
-    icon: mdi:power
+    icon: ${icon}
 
 # Sonoff Button
 binary_sensor:
@@ -159,7 +129,7 @@ binary_sensor:
         input: true
         pullup: true
       inverted: true
-    name: "${friendly_name} Button"
+    name: "Button"
     disabled_by_default: true
     on_press:
       - switch.toggle: relay
