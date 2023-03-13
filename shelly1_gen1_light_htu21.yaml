@@ -1,8 +1,10 @@
 substitutions:
   friendly_name: "Device Name"
   name: device-name
+  compile_limit: "4"
   
-  ip: 192.168.x.x
+  ip: 192.168.0.0
+  ip_com: 192.168.0.0
   gateway: !secret gateway
   subnet: !secret subnet
 
@@ -25,6 +27,8 @@ substitutions:
 
 esphome:
   name: ${name}
+  friendly_name: ${friendly_name}
+  compile_process_limit: ${compile_limit}
 
 esp8266:
   board: ${board}
@@ -55,7 +59,7 @@ wifi:
     static_ip: ${ip}
     gateway: ${gateway}
     subnet: ${subnet}
-
+  use_address: ${ip_com}
   # AP for Fallback
   ap:
     ssid: "${friendly_name}"
@@ -78,24 +82,17 @@ i2c:
 button:
   # Restart Button
   - platform: restart
-    name: "${friendly_name} Restart"
+    name: "Restart"
 
-text_sensor:
-  # Uptime
-  - platform: template
-    name: ${friendly_name} Uptime
-    id: uptime_human
-    icon: mdi:clock-start
-    disabled_by_default: true
-    
+text_sensor:    
   # WiFi Info
   - platform: wifi_info
     ip_address:
-      name: "${friendly_name} IP"
+      name: "IP"
       icon: "mdi:ip-network"
       disabled_by_default: true
     ssid:
-      name: "${friendly_name} SSID"
+      name: "SSID"
       icon: "mdi:wifi-strength-4"
       disabled_by_default: true
 
@@ -103,14 +100,14 @@ sensor:
   # HTU21
   - platform: htu21d
     temperature:
-      name: "${friendly_name} HTU21 Temperature"
+      name: "HTU21 Temperature"
     humidity:
-      name: "${friendly_name} HTU21 Humidity"
+      name: "HTU21 Humidity"
     update_interval: 60s
 
   # WiFi Signal
   - platform: wifi_signal
-    name: "${friendly_name} RSSI"
+    name: "RSSI"
     update_interval: 120s
     filters:
       - lambda: |-
@@ -121,34 +118,9 @@ sensor:
   # VCC Voltage
   - platform: adc
     pin: VCC
-    name: "${friendly_name} VCC Voltage"
+    name: "VCC Voltage"
     disabled_by_default: true
     
-  # Uptime
-  - platform: uptime
-    name: "${friendly_name} Uptime Seconds"
-    id: uptime_sensor
-    update_interval: 60s
-    disabled_by_default: true
-    internal: true
-    on_raw_value:
-      then:
-        - text_sensor.template.publish:
-            id: uptime_human
-            state: !lambda |-
-              int seconds = round(id(uptime_sensor).raw_state);
-              int days = seconds / (24 * 3600);
-              seconds = seconds % (24 * 3600);
-              int hours = seconds / 3600;
-              seconds = seconds % 3600;
-              int minutes = seconds /  60;
-              seconds = seconds % 60;
-              return (
-                (days ? to_string(days) + "d " : "") +
-                (hours ? to_string(hours) + "h " : "") +
-                (minutes ? to_string(minutes) + "m " : "") +
-                (to_string(seconds) + "s")
-              ).c_str();
 
 # Device Specific Config shelly1
 output:
@@ -158,7 +130,7 @@ output:
 
 light:
   - platform: binary
-    name: "${friendly_name}"
+    name: ""
     output: shelly_1_relay
     id: lightid
 
@@ -166,7 +138,7 @@ binary_sensor:
   - platform: gpio
     pin:
       number: GPIO5
-    name: "${friendly_name} Switch"
+    name: "Input"
     on_state:
       then:
         - light.toggle: lightid
