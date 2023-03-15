@@ -1,0 +1,4 @@
+
+# compile limit package
+esphome:
+  compile_process_limit: &{compile_limit}
