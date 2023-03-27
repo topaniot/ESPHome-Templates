@@ -1,0 +1,16 @@
+wifi:
+  # First SSID
+  networks:
+  - ssid: ${wifi_ssid}
+    password: ${wifi_pswd}
+  
+  # Manual IP
+  manual_ip:
+    static_ip: ${ip}
+    gateway: ${gateway}
+    subnet: ${subnet}
+  use_address: ${ip_com}
+  # AP for Fallback
+  ap:
+    ssid: ${friendly_name}
+    password: ${password}
