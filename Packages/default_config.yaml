@@ -2,6 +2,9 @@ esphome:
   name: ${name}
   friendly_name: ${friendly_name}
 
+logger:
+captive_portal:
+
 api:
   reboot_timeout: 5min
   encryption:
@@ -9,9 +12,6 @@ api:
 
 ota:
   password: ${password}
-  
-logger:
-captive_portal:
 
 web_server:
   port: 80
