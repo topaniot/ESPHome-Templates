@@ -1,4 +1,4 @@
 
 # compile limit package
 esphome:
-  compile_process_limit: &{compile_limit}
+  compile_process_limit: "1"
