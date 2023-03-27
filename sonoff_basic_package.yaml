@@ -22,5 +22,15 @@ substitutions:
 
 #########################################
 
-esp8266:
-  board: ${board}
+packages:
+  ##### download esphome code from Github
+  remote_package:
+    url: https://github.com/topaniot/ESPHome-Templates
+    ref: main
+    files: 
+      - Packages/sonoff_basic_switch.yaml
+      - Packages/wifi-dhcp.yaml
+      - Packages/default_config.yaml
+      - Packages/default_sensors.yaml
+      - Packages/compile_limit.yaml
+    refresh: 300s
