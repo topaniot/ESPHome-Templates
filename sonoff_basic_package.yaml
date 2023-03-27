@@ -1,0 +1,26 @@
+substitutions:
+  friendly_name: "Device Name"
+  name: device-name
+  icon: mdi:switch
+  compile_limit: "4"
+  
+  ip: 192.168.x.x
+  ip_com: 192.168.x.x
+  gateway: !secret gateway
+  subnet: !secret subnet
+
+  board: esp01_1m
+  password: !secret password
+  encryption_key: !secret encryption_key  
+  
+  wifi_ssid: !secret wifi_ssid
+  wifi_pswd: !secret wifi_password
+
+  # Optional
+  # wifi_ssid2: !secret wifi_ssid2
+  # wifi_pswd2: !secret wifi_password2
+
+#########################################
+
+esp8266:
+  board: ${board}
