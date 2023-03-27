@@ -17,7 +17,7 @@ sensor:
   # HTU21
   - platform: htu21d
     temperature:
-      name: "${friendly_name} HTU21 Temperature"
+      name: "HTU21 Temperature"
     humidity:
-      name: "${friendly_name} HTU21 Humidity"
+      name: "HTU21 Humidity"
     update_interval: "&{htu21_update_interval}"
