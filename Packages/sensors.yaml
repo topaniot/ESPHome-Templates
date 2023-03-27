@@ -1,1 +1,40 @@
+# Enable Web Server
+web_server:
+  port: 80
+  auth:
+    username: ${name}
+    password: ${password}
 
+button:
+  # Restart Button
+  - platform: restart
+    name: "Restart"
+
+text_sensor:
+  # WiFi Info
+  - platform: wifi_info
+    ip_address:
+      name: "IP"
+      icon: "mdi:ip-network"
+      disabled_by_default: true
+    ssid:
+      name: "SSID"
+      icon: "mdi:wifi-strength-4"
+      disabled_by_default: true
+
+sensor:
+  # WiFi Signal
+  - platform: wifi_signal
+    name: "RSSI"
+    update_interval: 120s
+    filters:
+      - lambda: |-
+          float VALUE = -20.0;
+          if (x <= VALUE) return x;
+          else return {};
+    
+  # VCC Voltage
+  - platform: adc
+    pin: VCC
+    name: "VCC Voltage"
+    disabled_by_default: true
