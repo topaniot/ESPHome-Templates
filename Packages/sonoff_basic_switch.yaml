@@ -1,0 +1,32 @@
+# Device Specific Config
+esp8266:
+  board: esp01_1m
+
+# Sonoff Status LED
+status_led:
+  pin:
+    number: GPIO13
+    inverted: yes
+
+# Sonoff Relay
+switch:
+  - platform: gpio
+    name: ""
+    pin: GPIO12
+    id: relay
+    icon: ${icon}
+
+# Sonoff Button
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO0
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    name: "Button"
+    disabled_by_default: true
+    on_press:
+      - switch.toggle: relay
+      
