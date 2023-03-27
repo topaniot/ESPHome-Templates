@@ -3,7 +3,6 @@ substitutions:
   name: device-name
   icon: mdi:switch
   
-  board: esp01_1m
   password: !secret password
   encryption_key: !secret encryption_key  
   
