@@ -1,0 +1,25 @@
+esphome:
+  name: ${name}
+  friendly_name: ${friendly_name}
+
+api:
+  reboot_timeout: 5min
+  encryption:
+    key: ${encryption_key}
+
+ota:
+  password: ${password}
+  
+logger:
+captive_portal:
+
+web_server:
+  port: 80
+  auth:
+    username: ${name}
+    password: ${password}
+
+button:
+  # Restart Button
+  - platform: restart
+    name: "Restart"
