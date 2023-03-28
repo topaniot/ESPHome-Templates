@@ -1,0 +1,15 @@
+### Package for DS18B20 
+# substitutions:
+#   ds18b20_adress: "0x2801144ef2caaa28"
+#   ds18b20_pin: GPIO0
+
+
+dallas:
+  - pin: ${ds18b20_pin}
+  
+sensor:  
+  - platform: dallas
+    address: ${ds18b20_adress}
+    name: "DS18B20 Temperature"
+    
+ 
