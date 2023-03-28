@@ -1,4 +1,5 @@
+### Compile Limit Package
+# Add this package to limit compile to 1 thread
 
-# compile limit package
 esphome:
   compile_process_limit: "1"
