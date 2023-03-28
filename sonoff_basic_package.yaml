@@ -35,7 +35,7 @@ packages:
   remote_package:
     url: https://github.com/topaniot/ESPHome-Templates
     ref: main
-    refresh: 300s
+    refresh: 1d
     files: [
       packages/sonoff_basic_switch.yaml,
       packages/wifi_dhcp.yaml,
