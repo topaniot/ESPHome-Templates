@@ -1,5 +1,12 @@
+# substitutions:
+#   friendly_name: "Boxe"
+#   password: !secret password
+#
+#   wifi_ssid: !secret wifi_ssid
+#   wifi_pswd: !secret wifi_password
+
+
 wifi:
-  # First SSID
   networks:
   - ssid: ${wifi_ssid}
     password: ${wifi_pswd}
