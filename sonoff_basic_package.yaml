@@ -9,19 +9,23 @@ substitutions:
   wifi_ssid: !secret wifi_ssid
   wifi_pswd: !secret wifi_password
 
-  # Optional. Require additional packages
+
+  # Additional packages
+  
+  # Second SSID
   # wifi_ssid2: !secret wifi_ssid2
   # wifi_pswd2: !secret wifi_password2
   
+  # Static IP
   # ip: 192.168.x.x
   # ip_com: 192.168.x.x
   # gateway: !secret gateway
   # subnet: !secret subnet
   
   # HTU21 Sensor
-  #   i2c_sda: "1"
-  #   i2c_scl: "3"
-  #   htu21_update_interval: 60s
+  # i2c_sda: "1"
+  # i2c_scl: "3"
+  # htu21_update_interval: 60s
   
   
   
