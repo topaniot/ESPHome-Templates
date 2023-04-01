@@ -10,24 +10,24 @@ substitutions:
   wifi_pswd: !secret wifi_password
 
 
-  # Additional packages
+  #### Additional packages
   
-  # Second SSID
+  ## Second SSID
   # wifi_ssid2: !secret wifi_ssid2
   # wifi_pswd2: !secret wifi_password2
   
-  # Static IP
+  ## Static IP
   # ip: 192.168.x.x
   # ip_com: 192.168.x.x
   # gateway: !secret gateway
   # subnet: !secret subnet
   
-  # HTU21 Sensor
+  ## HTU21 Sensor
   # i2c_sda: "1"
   # i2c_scl: "3"
   # htu21_update_interval: 60s
   
-  # DS18B20 Sensor
+  ## DS18B20 Sensor
   # ds18b20_adress: "0x0000000000000000"
   # ds18b20_pin: GPIO0
   
@@ -38,10 +38,10 @@ packages:
     url: https://github.com/topaniot/ESPHome-Templates
     ref: main
     refresh: 1d
-    files: [
-      packages/sonoff_basic_switch.yaml,
-      packages/wifi_dhcp.yaml,
-      packages/default_config.yaml,
-      packages/default_sensors.yaml,
-      packages/compile_limit.yaml]
+    files:
+      - packages/default_config.yaml
+      - packages/default_sensors.yaml
+      - packages/wifi_dhcp.yaml
+      - packages/sonoff_basic_switch.yaml
+      - packages/compile_limit.yaml
 
