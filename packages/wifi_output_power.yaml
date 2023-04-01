@@ -1,0 +1,6 @@
+### Package for lowering output power
+# substitutions:
+#   wifi_power: 18dB
+
+wifi:
+ output_power: ${wifi_power}
