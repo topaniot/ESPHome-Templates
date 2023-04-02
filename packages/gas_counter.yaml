@@ -2,7 +2,7 @@
 # Substitutions needed
 # substitutions:
 #   gas_counter_pin: GPIO13
-#   gas_counter_factor: 0.01
+#   gas_counter_factor: "0.01"
 
 sensor:
   - platform: pulse_meter
