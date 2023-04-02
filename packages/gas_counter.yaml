@@ -1,0 +1,27 @@
+### GAS counter package
+# Substitutions needed
+# substitutions:
+#   gas_counter_pin: GPIO13
+#   gas_counter_factor: "0.01"
+
+sensor:
+  - platform: pulse_meter
+    pin: ${gas_counter_pin}
+    unit_of_measurement: 'm³/min'
+    device_class: gas
+    name: 'Usage'
+    icon: "mdi:fire"
+    internal_filter: 100ms
+    internal_filter_mode: PULSE
+    accuracy_decimals: 2
+    filters:
+      - multiply: ${gas_counter_factor}
+    total:
+      name: "Counter"
+      icon: "mdi:fire"
+      unit_of_measurement: "m³"
+      device_class: gas
+      state_class: "total_increasing"
+      accuracy_decimals: 2
+      filters:
+        - multiply: ${gas_counter_factor}

@@ -2,134 +2,45 @@ substitutions:
   friendly_name: "Device Name"
   name: device-name
   icon: mdi:switch
-  compile_limit: "4"
   
-  ip: 192.168.x.x
-  ip_com: 192.168.x.x
-  gateway: !secret gateway
-  subnet: !secret subnet
-
-  board: esp01_1m
   password: !secret password
   encryption_key: !secret encryption_key  
   
   wifi_ssid: !secret wifi_ssid
   wifi_pswd: !secret wifi_password
 
-  # Optional
+
+  #### Additional packages
+  
+  ## Second SSID
   # wifi_ssid2: !secret wifi_ssid2
   # wifi_pswd2: !secret wifi_password2
-
+  
+  ## Static IP
+  # ip: 192.168.x.x
+  # ip_com: 192.168.x.x
+  # gateway: !secret gateway
+  # subnet: !secret subnet
+  
+  ## HTU21 Sensor
+  # i2c_sda: "1"
+  # i2c_scl: "3"
+  # htu21_update_interval: 60s
+  
+  ## DS18B20 Sensor
+  # ds18b20_adress: "0x0000000000000000"
+  # ds18b20_pin: GPIO0
+  
 #########################################
 
-esphome:
-  name: ${name}
-  friendly_name: ${friendly_name}
-  compile_process_limit: ${compile_limit}
+packages:
+  remote_package:
+    url: https://github.com/topaniot/ESPHome-Templates
+    ref: main
+    refresh: 1d
+    files:
+      - packages/default_config.yaml
+      - packages/default_sensors.yaml
+      - packages/wifi_dhcp.yaml
+      - packages/sonoff_basic_switch.yaml
 
-esp8266:
-  board: ${board}
-
-logger:
-captive_portal:
-
-api:
-  reboot_timeout: 5min
-  encryption:
-    key: ${encryption_key}
-
-ota:
-  password: ${password}
-
-wifi:
-  # First SSID
-  networks:
-  - ssid: ${wifi_ssid}
-    password: ${wifi_pswd}
-
-  # Second SSID
-  # - ssid: ${wifi_ssid2}
-  #   password: ${wifi_pswd2}
-  
-  # Manual IP
-  manual_ip:
-    static_ip: ${ip}
-    gateway: ${gateway}
-    subnet: ${subnet}
-  use_address: ${ip_com}
-  # AP for Fallback
-  ap:
-    ssid: "${friendly_name}"
-    password: ${password}
-
-# Enable Web Server
-web_server:
-  port: 80
-  auth:
-    username: ${name}
-    password: ${password}
-
-button:
-  # Restart Button
-  - platform: restart
-    name: "Restart"
-
-text_sensor:
-    
-  # WiFi Info
-  - platform: wifi_info
-    ip_address:
-      name: "IP"
-      icon: "mdi:ip-network"
-      disabled_by_default: true
-    ssid:
-      name: "SSID"
-      icon: "mdi:wifi-strength-4"
-      disabled_by_default: true
-
-sensor:
-  # WiFi Signal
-  - platform: wifi_signal
-    name: "RSSI"
-    update_interval: 120s
-    filters:
-      - lambda: |-
-          float VALUE = -20.0;
-          if (x <= VALUE) return x;
-          else return {};
-    
-  # VCC Voltage
-  - platform: adc
-    pin: VCC
-    name: "VCC Voltage"
-    disabled_by_default: true
-    
-    
-# Device Specific Config
-# Sonoff Status LED
-status_led:
-  pin:
-    number: GPIO13
-    inverted: yes
-
-# Sonoff Relay
-switch:
-  - platform: gpio
-    name: ""
-    pin: GPIO12
-    id: relay
-    icon: ${icon}
-
-# Sonoff Button
-binary_sensor:
-  - platform: gpio
-    pin:
-      number: GPIO0
-      mode:
-        input: true
-        pullup: true
-      inverted: true
-    name: "Button"
-    disabled_by_default: true
-    on_press:
-      - switch.toggle: relay
