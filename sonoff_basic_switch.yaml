@@ -43,5 +43,4 @@ packages:
       - packages/default_sensors.yaml
       - packages/wifi_dhcp.yaml
       - packages/sonoff_basic_switch.yaml
-      - packages/compile_limit.yaml
 
