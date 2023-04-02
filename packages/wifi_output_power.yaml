@@ -1,0 +1,8 @@
+# The amount of TX power for the WiFi interface from 8.5dB to 20.5dB. Default for ESP8266 is 20dB, 20.5dB might cause unexpected restarts.
+# Substitiutions needed:
+#
+# substitutions:
+#   wifi_output_power: 18dB
+
+wifi:
+ output_power: ${wifi_output_power}
