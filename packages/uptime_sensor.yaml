@@ -2,7 +2,7 @@
 
 text_sensor:
   - platform: template
-    name: ${friendly_name} Uptime
+    name: Uptime
     id: uptime_human
     icon: mdi:clock-start
     disabled_by_default: true
