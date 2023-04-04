@@ -20,4 +20,4 @@ sensor:
       name: "HTU21 Temperature"
     humidity:
       name: "HTU21 Humidity"
-    update_interval: &{htu21_update_interval}
+    update_interval: ${htu21_update_interval}
