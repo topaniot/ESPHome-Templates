@@ -1,5 +1,6 @@
-### GAS counter package
+### GAS meter package
 # Substitutions needed
+#
 # substitutions:
 #   gas_meter_pin: GPIO13
 #   gas_meter_factor: "0.01"
