@@ -17,7 +17,7 @@ sensor:
     filters:
       - multiply: ${gas_counter_factor}
     total:
-      name: "Counter"
+      name: "Total"
       icon: "mdi:fire"
       unit_of_measurement: "m³"
       device_class: gas
