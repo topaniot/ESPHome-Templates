@@ -1,151 +1,45 @@
 substitutions:
   friendly_name: "Device Name"
   name: device-name
+  icon: mdi:switch
   
-  ip: 192.168.x.x
-  gateway: !secret gateway
-  subnet: !secret subnet
-
-  board: esp01_1m
   password: !secret password
   encryption_key: !secret encryption_key  
   
   wifi_ssid: !secret wifi_ssid
   wifi_pswd: !secret wifi_password
 
-  # Optional
+
+  #### Additional packages
+  
+  ## Second SSID
   # wifi_ssid2: !secret wifi_ssid2
   # wifi_pswd2: !secret wifi_password2
-
+  
+  ## Static IP
+  # ip: 192.168.x.x
+  # ip_com: 192.168.x.x
+  # gateway: !secret gateway
+  # subnet: !secret subnet
+  
+  ## HTU21 Sensor
+  # i2c_sda: "1"
+  # i2c_scl: "3"
+  # htu21_update_interval: 60s
+  
+  ## DS18B20 Sensor
+  # ds18b20_adress: "0x0000000000000000"
+  # ds18b20_pin: GPIO0
+  
 #########################################
 
-esphome:
-  name: ${name}
-
-esp8266:
-  board: ${board}
-
-logger:
-captive_portal:
-
-api:
-  reboot_timeout: 5min
-  encryption:
-    key: ${encryption_key}
-
-ota:
-  password: ${password}
-
-wifi:
-  # First SSID
-  networks:
-  - ssid: ${wifi_ssid}
-    password: ${wifi_pswd}
-
-  # Second SSID
-  # - ssid: ${wifi_ssid2}
-  #   password: ${wifi_pswd2}
-  
-  # Manual IP
-  manual_ip:
-    static_ip: ${ip}
-    gateway: ${gateway}
-    subnet: ${subnet}
-
-  # AP for Fallback
-  ap:
-    ssid: "${friendly_name}"
-    password: ${password}
-# Enable Web Server
-web_server:
-  port: 80
-  auth:
-    username: ${name}
-    password: ${password}
-
-button:
-  # Restart Button
-  - platform: restart
-    name: "${friendly_name} Restart"
-
-text_sensor:
-  # Uptime
-  - platform: template
-    name: ${friendly_name} Uptime
-    id: uptime_human
-    icon: mdi:clock-start
-    disabled_by_default: true
-    
-  # WiFi Info
-  - platform: wifi_info
-    ip_address:
-      name: "${friendly_name} IP"
-      icon: "mdi:ip-network"
-      disabled_by_default: true
-    ssid:
-      name: "${friendly_name} SSID"
-      icon: "mdi:wifi-strength-4"
-      disabled_by_default: true
-
-sensor:
-  # WiFi Signal
-  - platform: wifi_signal
-    name: "${friendly_name} RSSI"
-    update_interval: 120s
-    filters:
-      - lambda: |-
-          float VALUE = -20.0;
-          if (x <= VALUE) return x;
-          else return {};
-    
-  # VCC Voltage
-  - platform: adc
-    pin: VCC
-    name: "${friendly_name} VCC Voltage"
-    disabled_by_default: true
-    
-  # Uptime
-  - platform: uptime
-    name: "${friendly_name} Uptime Seconds"
-    id: uptime_sensor
-    update_interval: 60s
-    disabled_by_default: true
-    internal: true
-    on_raw_value:
-      then:
-        - text_sensor.template.publish:
-            id: uptime_human
-            state: !lambda |-
-              int seconds = round(id(uptime_sensor).raw_state);
-              int days = seconds / (24 * 3600);
-              seconds = seconds % (24 * 3600);
-              int hours = seconds / 3600;
-              seconds = seconds % 3600;
-              int minutes = seconds /  60;
-              seconds = seconds % 60;
-              return (
-                (days ? to_string(days) + "d " : "") +
-                (hours ? to_string(hours) + "h " : "") +
-                (minutes ? to_string(minutes) + "m " : "") +
-                (to_string(seconds) + "s")
-              ).c_str();
-
-# Device Specific Config shelly1
-
-# Button
-binary_sensor:
-  - platform: gpio
-    pin:
-      number: GPIO5
-    name: "${friendly_name} Input"
-    disabled_by_default: true
-    on_state:
-      - switch.toggle: relay
-
-# Relay
-switch:
-  - platform: gpio
-    name: "${friendly_name}"
-    pin: GPIO4
-    id: relay
-    icon: mdi:power
+packages:
+  remote_package:
+    url: https://github.com/topaniot/ESPHome-Templates
+    ref: main
+    refresh: 1d
+    files:
+      - packages/default_config.yaml
+      - packages/default_sensors.yaml
+      - packages/wifi_dhcp.yaml
+      - packages/shelly_1_switch.yaml
