@@ -55,6 +55,7 @@ binary_sensor:
         pullup: true
       inverted: true
     name: "Touchpad 1"
+    disabled_by_default: true
     on_press:
       - light.toggle: light_1
   - platform: gpio
@@ -65,6 +66,7 @@ binary_sensor:
         pullup: true
       inverted: true
     name: "Touchpad 2"
+    disabled_by_default: true
     on_press:
       - light.toggle: light_2
   - platform: gpio
@@ -75,6 +77,7 @@ binary_sensor:
         pullup: true
       inverted: true
     name: "Touchpad 3"
+    disabled_by_default: true
     on_press:
       - light.toggle: light_3
   - platform: status
