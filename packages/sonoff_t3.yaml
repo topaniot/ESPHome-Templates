@@ -25,7 +25,7 @@ output:
 light:
     
   - platform: binary
-    name: ""
+    name: "1"
     id: light_1
     output: relay_1
     
