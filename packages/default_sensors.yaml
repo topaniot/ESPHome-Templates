@@ -1,8 +1,3 @@
-button:
-  # Restart Button
-  - platform: restart
-    name: "Restart"
-
 text_sensor:
   # WiFi Info
   - platform: wifi_info
