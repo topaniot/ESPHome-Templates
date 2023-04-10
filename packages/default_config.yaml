@@ -16,6 +16,11 @@ esphome:
 logger:
 captive_portal:
 
+wifi:
+  ap:
+    ssid: ${friendly_name}
+    password: ${password}
+
 api:
   reboot_timeout: 5min
   encryption:
