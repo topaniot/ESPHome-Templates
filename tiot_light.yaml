@@ -40,5 +40,6 @@ packages:
     files:
       - packages/default_config.yaml
       - packages/default_sensors.yaml
+      - packages/esp8266_specific.yaml
       - packages/wifi_dhcp.yaml
       - packages/tiot_light.yaml
