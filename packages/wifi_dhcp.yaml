@@ -11,6 +11,3 @@ wifi:
   - ssid: ${wifi_ssid}
     password: ${wifi_pswd}
 
-  ap:
-    ssid: ${friendly_name}
-    password: ${password}

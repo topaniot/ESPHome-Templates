@@ -1,4 +1,4 @@
-### Default config for devices
+### Lite config for devices
 # Substitutions needed
 #
 # substitutions:
@@ -14,12 +14,6 @@ esphome:
   friendly_name: ${friendly_name}
 
 logger:
-captive_portal:
-
-wifi:
-  ap:
-    ssid: ${friendly_name}
-    password: ${password}
 
 api:
   reboot_timeout: 5min
@@ -28,14 +22,3 @@ api:
 
 ota:
   password: ${password}
-
-web_server:
-  port: 80
-  auth:
-    username: ${name}
-    password: ${password}
-
-button:
-  # Restart Button
-  - platform: restart
-    name: "Restart"

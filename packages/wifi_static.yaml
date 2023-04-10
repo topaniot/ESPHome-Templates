@@ -22,7 +22,4 @@ wifi:
     gateway: ${gateway}
     subnet: ${subnet}
   use_address: ${ip_com}
-  # AP for Fallback
-  ap:
-    ssid: ${friendly_name}
-    password: ${password}
+
