@@ -44,6 +44,9 @@ output:
       number: GPIO00
       inverted: true
       
+time:
+  - platform: homeassistant
+    id: homeassistant_time      
       
 sensor:  
   - platform: hlw8012
