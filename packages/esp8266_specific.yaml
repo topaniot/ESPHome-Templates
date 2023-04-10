@@ -1,0 +1,6 @@
+sensor:
+  # VCC Voltage
+  - platform: adc
+    pin: VCC
+    name: "VCC Voltage"
+    disabled_by_default: true
