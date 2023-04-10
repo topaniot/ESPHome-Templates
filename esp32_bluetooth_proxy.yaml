@@ -28,4 +28,4 @@ packages:
       - packages/default_config.yaml
       - packages/default_sensors.yaml
       - packages/wifi_dhcp.yaml
-      - packages/ble_proxy.yaml
+      - packages/bluetooth_proxy.yaml
