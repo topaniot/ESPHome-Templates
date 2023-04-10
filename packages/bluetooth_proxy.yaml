@@ -1,0 +1,10 @@
+# Substitutions needed
+# board: nodemcu-32s
+
+esp32:
+  board: ${board}
+  framework:
+    type: arduino
+
+esp32_ble_tracker:
+bluetooth_proxy:
