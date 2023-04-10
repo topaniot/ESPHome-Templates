@@ -37,6 +37,14 @@ switch:
     icon: "${icon}" 
     
     
+output:
+  - platform: esp8266_pwm
+    id: state_led
+    pin:
+      number: GPIO00
+      inverted: true
+      
+      
 sensor:  
   - platform: hlw8012
     cf_pin: GPIO05
@@ -95,12 +103,6 @@ sensor:
     id: temp_analog_reading
     pin: A0
     
-  output:
-  - platform: esp8266_pwm
-    id: state_led
-    pin:
-      number: GPIO00
-      inverted: true
       
 # Overheat Protection
 interval:
