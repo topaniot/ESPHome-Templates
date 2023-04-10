@@ -20,9 +20,3 @@ sensor:
           float VALUE = -20.0;
           if (x <= VALUE) return x;
           else return {};
-    
-  # VCC Voltage
-  - platform: adc
-    pin: VCC
-    name: "VCC Voltage"
-    disabled_by_default: true
