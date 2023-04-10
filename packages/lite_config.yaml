@@ -1,0 +1,24 @@
+### Default config for devices
+# Substitutions needed
+#
+# substitutions:
+#   friendly_name: "Boxe"
+#   name: boxe
+# 
+#   password: !secret password
+#   encryption_key: !secret encryption_key  
+
+
+esphome:
+  name: ${name}
+  friendly_name: ${friendly_name}
+
+logger:
+
+api:
+  reboot_timeout: 5min
+  encryption:
+    key: ${encryption_key}
+
+ota:
+  password: ${password}
