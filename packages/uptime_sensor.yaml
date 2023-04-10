@@ -13,7 +13,6 @@ sensor:
     id: uptime_sensor
     update_interval: 60s
     disabled_by_default: true
-    internal: true
     on_raw_value:
       then:
         - text_sensor.template.publish:
