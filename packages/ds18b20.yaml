@@ -9,6 +9,7 @@ dallas:
   
 sensor:  
   - platform: dallas
+    id: ds18b20_sensor
     address: ${ds18b20_adress}
     name: "DS18B20 Temperature"
     
