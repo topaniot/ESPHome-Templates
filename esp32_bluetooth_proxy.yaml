@@ -1,21 +1,17 @@
 substitutions:
   friendly_name: "Device Name"
   name: device-name
+  board: nodemcu-32s
   
   ip: 192.168.x.x
   gateway: !secret gateway
   subnet: !secret subnet
 
-  board: nodemcu-32s
   password: !secret password
   encryption_key: !secret encryption_key  
   
   wifi_ssid: !secret wifi_ssid
   wifi_pswd: !secret wifi_password
-
-  # Optional
-  # wifi_ssid2: !secret wifi_ssid2
-  # wifi_pswd2: !secret wifi_password2
 
 #########################################
 
@@ -27,5 +23,6 @@ packages:
     files:
       - packages/default_config.yaml
       - packages/default_sensors.yaml
-      - packages/wifi_dhcp.yaml
+      - packages/esp32_specific.yaml
+      - packages/wifi_static.yaml
       - packages/bluetooth_proxy.yaml
