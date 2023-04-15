@@ -9,7 +9,6 @@ sensor:
   - platform: pulse_meter
     pin: ${gas_meter_pin}
     unit_of_measurement: 'm³/min'
-    device_class: gas
     name: 'Usage'
     icon: "mdi:fire"
     internal_filter: 100ms
