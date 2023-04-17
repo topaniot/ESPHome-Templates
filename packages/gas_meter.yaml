@@ -13,7 +13,7 @@ sensor:
     icon: "mdi:fire"
     internal_filter: 100ms
     internal_filter_mode: PULSE
-    accuracy_decimals: 3
+    accuracy_decimals: 2
     filters:
       - multiply: ${gas_meter_factor}
     total:
