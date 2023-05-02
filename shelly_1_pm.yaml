@@ -41,9 +41,9 @@ substitutions:
 
 packages:
   remote_package:
-    url: https://github.com/topaniot/ESPHome-Templates
+    url: !secret github_url
     ref: main
-    refresh: 30s
+    refresh: !secret refresh_time
     files:
       - packages/default_config.yaml
       - packages/default_sensors.yaml
