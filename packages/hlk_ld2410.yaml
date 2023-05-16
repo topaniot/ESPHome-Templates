@@ -1,0 +1,66 @@
+# HLK2410 Presence sensor
+
+binary_sensor:
+  - platform: ld2410
+    has_target:
+      name: Presence
+    has_moving_target:
+      name: Moving Target
+      disabled_by_default: true
+    has_still_target:
+      name: Still Target
+      disabled_by_default: true
+
+sensor:
+  - platform: ld2410
+    moving_distance:
+      name : Moving Distance
+      disabled_by_default: true
+    still_distance:
+      name: Still Distance
+      disabled_by_default: true
+    moving_energy:
+      name: Move Energy
+      disabled_by_default: true
+    still_energy:
+      name: Still Energy
+      disabled_by_default: true
+    detection_distance:
+      name: Detection Distance
+      disabled_by_default: true
+
+uart:
+  tx_pin: ${ld2410_tx}
+  rx_pin: ${ld2410_rx}
+  baud_rate: 256000
+  parity: NONE
+  stop_bits: 1
+
+logger:
+  baud_rate: 0
+
+ld2410:
+  timeout: ${ld2410_timeout}
+  max_move_distance : ${ld2410_distance}
+  max_still_distance: ${ld2410_distance}
+
+  g0_still_threshold: 20
+  g1_still_threshold: 20
+  g2_still_threshold: 40
+  g3_still_threshold: 40
+  g4_still_threshold: 40
+  g5_still_threshold: 40
+  g6_still_threshold: 15
+  g7_still_threshold: 15
+  g8_still_threshold: 15
+   
+  
+  g0_move_threshold: 50
+  g1_move_threshold: 50 
+  g2_move_threshold: 40
+  g3_move_threshold: 40
+  g4_move_threshold: 40
+  g5_move_threshold: 40
+  g6_move_threshold: 30
+  g7_move_threshold: 30
+  g8_move_threshold: 30
