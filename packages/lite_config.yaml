@@ -23,8 +23,3 @@ api:
 ota:
   password: ${password}
 
-web_server:
-  port: 80
-  auth:
-    username: ${name}
-    password: ${password}
