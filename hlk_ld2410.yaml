@@ -1,0 +1,30 @@
+substitutions:
+  friendly_name: "HLK LD2410"
+  name: hlk-ld2410
+  board: nodemcu-32s
+  
+  password: !secret password
+  encryption_key: !secret encryption_key  
+  
+  wifi_ssid: !secret wifi_ssid
+  wifi_pswd: !secret wifi_password
+  
+  ld2410_distance: 6m
+  ld2410_timeout: 60s
+  ld2410_tx: "1"
+  ld2410_rx: "3"
+
+#########################################
+
+packages:
+  remote_package:
+    url: !secret github_url
+    ref: main
+    refresh: !secret refresh_time
+    files:
+      - packages/default_config.yaml
+      - packages/default_sensors.yaml
+      - packages/esp32_specific.yaml
+      - packages/wifi_dhcp.yaml
+      - packages/hlk_ld2410.yaml
+      - packages/bluetooth_proxy.yaml
