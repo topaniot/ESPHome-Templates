@@ -1,0 +1,9 @@
+# Substitutions needed
+# substitutions:
+#   wifi_ssid2: !secret wifi_ssid3
+#   wifi_pswd2: !secret wifi_password3
+
+wifi:
+  networks:
+   - ssid: ${wifi_ssid3}
+     password: ${wifi_pswd3}
