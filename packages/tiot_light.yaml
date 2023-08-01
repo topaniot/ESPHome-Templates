@@ -38,3 +38,4 @@ light:
     name: ""
     output: shelly_1_relay
     id: lightid
+    restore_mode: RESTORE_DEFAULT_OFF
