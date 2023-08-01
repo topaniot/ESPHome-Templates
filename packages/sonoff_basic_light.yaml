@@ -21,6 +21,7 @@ light:
     name: ""
     output: sonoff_relay
     id: lightid
+    restore_mode: RESTORE_DEFAULT_OFF
 
 # Sonoff Button
 binary_sensor:
