@@ -36,6 +36,7 @@ switch:
     id: shelly_relay
     restore_mode: ALWAYS_OFF
     icon: "${icon}" 
+    restore_mode: RESTORE_DEFAULT_OFF
     
     
 output:
