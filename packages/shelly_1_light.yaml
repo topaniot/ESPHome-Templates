@@ -2,6 +2,7 @@
 
 esp8266:
   board: esp01_1m
+  restore_from_flash: true
 
 output:
   - platform: gpio
@@ -13,6 +14,7 @@ light:
     name: ""
     output: shelly_1_relay
     id: lightid
+    restore_mode: RESTORE_DEFAULT_OFF
 
 binary_sensor:
   - platform: gpio

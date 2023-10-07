@@ -22,7 +22,6 @@ wifi:
     password: ${password}
 
 api:
-  reboot_timeout: 5min
   encryption:
     key: ${encryption_key}
 

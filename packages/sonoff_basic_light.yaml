@@ -2,6 +2,7 @@
 
 esp8266:
   board: esp01_1m
+  restore_from_flash: true
   
 # Sonoff Status LED
 status_led:
@@ -20,6 +21,7 @@ light:
     name: ""
     output: sonoff_relay
     id: lightid
+    restore_mode: RESTORE_DEFAULT_OFF
 
 # Sonoff Button
 binary_sensor:

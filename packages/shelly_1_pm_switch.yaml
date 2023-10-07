@@ -12,6 +12,7 @@
   
 esp8266:
   board: esp01_1m
+  restore_from_flash: true
   
 # Input
 binary_sensor:
@@ -35,6 +36,7 @@ switch:
     id: shelly_relay
     restore_mode: ALWAYS_OFF
     icon: "${icon}" 
+    restore_mode: RESTORE_DEFAULT_OFF
     
     
 output:

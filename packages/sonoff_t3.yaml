@@ -2,6 +2,7 @@
 
 esp8266:
   board: esp01_1m
+  restore_from_flash: true
   
 output:
   - platform: gpio
@@ -28,16 +29,19 @@ light:
     name: "1"
     id: light_1
     output: relay_1
+    restore_mode: RESTORE_DEFAULT_OFF
     
   - platform: binary
     name: "2"
     id: light_2
     output: relay_2
+    restore_mode: RESTORE_DEFAULT_OFF
     
   - platform: binary
     name: "3"
     id: light_3
     output: relay_3
+    restore_mode: RESTORE_DEFAULT_OFF
     
   # BLUE LED
   - platform: monochromatic
