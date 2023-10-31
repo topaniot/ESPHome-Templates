@@ -13,7 +13,7 @@ esphome:
   name: ${name}
   friendly_name: ${friendly_name}
 
-logger:
+# logger:
 
 api:
   reboot_timeout: 5min
