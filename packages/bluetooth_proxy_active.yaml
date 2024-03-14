@@ -4,7 +4,7 @@
 esp32:
   board: ${board}
   framework:
-    type: arduino
+    type: esp-idf
 
 esp32_ble_tracker:
 bluetooth_proxy:
