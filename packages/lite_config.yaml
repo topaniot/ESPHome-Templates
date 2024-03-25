@@ -13,10 +13,11 @@ esphome:
   name: ${name}
   friendly_name: ${friendly_name}
 
-# logger:
+logger:
 
 api:
-  reboot_timeout: 5min
+  encryption:
+    key: ${encryption_key}
 
 ota:
   password: ${password}
