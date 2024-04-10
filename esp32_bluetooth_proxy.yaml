@@ -38,8 +38,8 @@ packages:
     ref: main
     refresh: !secret refresh_time
     files:
-      - packages/default_config.yaml
-      - packages/default_sensors.yaml
+      - packages/lite_config.yaml
       - packages/esp32_specific.yaml
       - packages/wifi_dhcp.yaml
       - packages/bluetooth_proxy.yaml
+     #- packages/bluetooth_proxy_active.yaml
