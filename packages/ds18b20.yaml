@@ -4,13 +4,12 @@
 #   ds18b20_pin: GPIO0
 
 
-dallas:
-  - pin: ${ds18b20_pin}
+one_wire:
+  - platform: gpio
+    pin: ${ds18b20_pin}
   
 sensor:  
-  - platform: dallas
+  - platform: dallas_temp
     id: ds18b20_sensor
     address: ${ds18b20_adress}
     name: "DS18B20 Temperature"
-    
- 
