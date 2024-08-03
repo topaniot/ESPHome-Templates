@@ -1,7 +1,7 @@
 substitutions:
   friendly_name: "Device Name"
   name: device-name
-  icon: mdi:switch
+  icon: mdi:lightbulb
   
   password: !secret password
   encryption_key: !secret encryption_key  
