@@ -1,7 +1,7 @@
 substitutions:
   friendly_name: "Device Name"
   name: device-name
-  board: nodemcu-32s
+  board: esp32dev
   
   password: !secret password
   encryption_key: !secret encryption_key  
