@@ -1,0 +1,41 @@
+### TIOT Module as light
+
+esp8266:
+  board: esp01_1m
+  restore_from_flash: true
+    
+# TIOT Buttons
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO12
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    name: "Input 1"
+    disabled_by_default: true
+    on_press:
+      - light.toggle: lightid
+  - platform: gpio
+    pin:
+      number: GPIO13
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    name: "Input 2"
+    disabled_by_default: true
+
+# TIOT Light
+output:
+  - platform: gpio
+    pin: GPIO4
+    id: shelly_1_relay
+
+light:
+  - platform: binary
+    name: none
+    output: shelly_1_relay
+    id: lightid
+    restore_mode: RESTORE_DEFAULT_OFF
