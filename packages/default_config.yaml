@@ -24,7 +24,7 @@ wifi:
 api:
   encryption:
     key: ${encryption_key}
-  reboot_timeout: 0s
+  reboot_timeout: 1h
 
 ota:
   platform: esphome
