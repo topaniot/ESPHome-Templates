@@ -30,7 +30,7 @@ binary_sensor:
     name: "Input"
     disabled_by_default: true
     on_state:
-      - light.toggle: lightid
+      - switch.toggle: relay
       - lambda: |-
           id(switch_counter) += 1;
       - script.execute: reset_counter_script
