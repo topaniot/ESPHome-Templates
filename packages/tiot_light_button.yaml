@@ -17,6 +17,11 @@ binary_sensor:
     disabled_by_default: true
     on_press:
       - light.toggle: lightid
+    on_click:
+      min_length: 10s
+      max_length: 30s
+      then:
+        - button.press: restart_button
   - platform: gpio
     pin:
       number: GPIO13

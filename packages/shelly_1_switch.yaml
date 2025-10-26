@@ -8,6 +8,20 @@ esp8266:
   board: esp01_1m
   restore_from_flash: true
 
+globals:
+  - id: switch_counter
+    type: int
+    restore_value: false
+    initial_value: '0'
+
+script:
+  - id: reset_counter_script
+    mode: restart
+    then:
+      - delay: 1s
+      - lambda: |-
+          id(switch_counter) = 0;
+
 # Button
 binary_sensor:
   - platform: gpio
@@ -17,6 +31,15 @@ binary_sensor:
     disabled_by_default: true
     on_state:
       - switch.toggle: relay
+      - lambda: |-
+          id(switch_counter) += 1;
+      - script.execute: reset_counter_script
+      - if:
+          condition:
+            lambda: 'return id(switch_counter) >= 10;'
+          then:
+            - logger.log: "Switch toggled 10 times. Rebooting!"
+            - button.press: restart_button
 
 # Relay
 switch:
