@@ -7,7 +7,9 @@
 
 
 wifi:
+  min_auth_mode: WPA2
   networks:
   - ssid: ${wifi_ssid}
     password: ${wifi_pswd}
+
 
