@@ -11,7 +11,7 @@ sensor:
     unit_of_measurement: 'm³/min'
     name: 'Usage'
     icon: "mdi:fire"
-    internal_filter: 100ms
+    internal_filter: 50ms
     internal_filter_mode: PULSE
     accuracy_decimals: 2
     filters:
