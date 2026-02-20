@@ -11,6 +11,7 @@
 #   subnet: !secret subnet
 
 wifi:
+  min_auth_mode: WPA2
   # First SSID
   networks:
   - ssid: ${wifi_ssid}
