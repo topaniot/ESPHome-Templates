@@ -30,7 +30,7 @@ binary_sensor:
     name: "Input 1"
     disabled_by_default: true
     filters:
-      - delayed_on_off: 50ms
+      - delayed_on_off: 100ms
     on_state:
       - light.toggle: lightid
       - lambda: |-
